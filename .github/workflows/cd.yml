@@ -1,0 +1,40 @@
+name: Pipeline CD
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Integration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configuration
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Build
+        run:  ./gradlew clean build -x test
+
+      - name: Unit tests
+        run: ./gradlew clean test
+
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build docker image
+        run: docker build -t lucasmachadoid/fiap-file-process .
+
+      - name: Push image docker
+        run: docker push lucasmachadoid/fiap-file-process
