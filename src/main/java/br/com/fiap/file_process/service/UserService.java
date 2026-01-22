@@ -1,31 +1,37 @@
 package br.com.fiap.file_process.service;
 
-import br.com.fiap.file_process.entity.User;
+import br.com.fiap.file_process.model.User;
 import br.com.fiap.file_process.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public User register(String email, String rawPassword) {
-        if (userRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("email já existe");
+    public User createUser(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Nome de usuário já existe");
+        }
+        
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email já cadastrado");
         }
 
-        User user = User.builder()
-            .email(email)
-            .password(passwordEncoder.encode(rawPassword))
-            .build();
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }
