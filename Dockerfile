@@ -1,37 +1,44 @@
+# =========================
 # Build stage
-FROM gradle:8-jdk21-alpine AS build
+# =========================
+FROM gradle:8-jdk21 AS build
 
 WORKDIR /app
 
-# Copy gradle files and download dependencies
+# Copiar arquivos do Gradle primeiro (cache)
 COPY build.gradle settings.gradle ./
 RUN gradle dependencies --no-daemon
 
-# Copy source code
+# Copiar o código
 COPY src ./src
 
-# Build the application
+# Build do jar
 RUN gradle clean build -x test --no-daemon
 
+
+# =========================
 # Runtime stage
-FROM eclipse-temurin:21-jre-alpine AS run
+# =========================
+FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
-# Create non-root user
-RUN addgroup -S appuser && adduser -S -G appuser appuser
+# Dependências nativas do FFmpeg
+RUN apt-get update && \
+    apt-get install -y ffmpeg libglib2.0-0 libsm6 libxext6 && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy the built jar from build stage
+# Criar usuário não-root
+RUN useradd -ms /bin/bash appuser
+
+# Copiar o jar do stage build
 COPY --from=build /app/build/libs/*.jar app.jar
 
-# Change ownership to appuser
+# Permissões
 RUN chown -R appuser:appuser /app
 
-# Switch to non-root user
 USER appuser
 
-# Expose port
 EXPOSE 8080
 
-# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
