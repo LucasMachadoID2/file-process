@@ -131,7 +131,7 @@ Para acessar os endpoints protegidos, inclua o token no header Authorization:
 * **Renovação:** Após a expiração, é necessário realizar um novo login.
 * **Integridade:** E-mails devem ser únicos no sistema.
 * **Segurança:** As senhas são criptografadas antes do armazenamento no banco de dados.
-* 
+
 ---
 
 ## 🔌 Testando a API (Postman/Insomnia)
