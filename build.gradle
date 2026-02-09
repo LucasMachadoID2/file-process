@@ -38,6 +38,11 @@ dependencies {
     implementation 'software.amazon.awssdk:s3'
 
     /* =========================
+       EMAIL
+       ========================= */
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    /* =========================
        VIDEO PROCESSING
        ========================= */
     implementation 'org.bytedeco:javacv-platform:1.5.10'
@@ -46,11 +51,12 @@ dependencies {
        TESTS
        ========================= */
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core'
 
-	/* =========================
+    /* =========================
        RABBITMQ
     ========================= */
-	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 }
 

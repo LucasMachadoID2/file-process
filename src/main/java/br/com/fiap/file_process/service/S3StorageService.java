@@ -49,8 +49,6 @@ public class S3StorageService {
         );
     }
 
-
-    //COM RABBITMQ
     public String uploadZipRabbit(File zipFile, String email, String videoId) {
 
         String key = email + "/" + videoId + "/frames.zip";
@@ -65,5 +63,4 @@ public class S3StorageService {
 
         return getFileUrl(key);
     }
-
 }

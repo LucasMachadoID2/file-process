@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.fiap.file_process.service.VideoProcessingService;
 
-
 @RestController
 @RequestMapping("/videos")
 public class VideoController {
