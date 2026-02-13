@@ -1,11 +1,25 @@
 aws:
-  region: us-east-1
   s3:
     bucket-name: file-process-bucket-uuy3c0
   ses:
     sender: no-reply@fiapx.com
 
 spring:
+  mail:
+    host: email-smtp.us-east-1.amazonaws.com
+    port: 587
+    username: ${AWS_SES_SMTP_USER}
+    password: ${AWS_SES_SMTP_PASS}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
   servlet:
     multipart:
       max-file-size: 500MB
@@ -20,3 +34,4 @@ spring:
 rabbitmq:
   queue:
     upload: fila.upload
+

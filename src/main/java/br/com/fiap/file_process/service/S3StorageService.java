@@ -21,6 +21,7 @@ public class S3StorageService {
 
     public String uploadZip(File zipFile, String email, String videoId) {
 
+
         String sanitizedEmail = email.replaceAll("[^a-zA-Z0-9@._-]", "_");
 
         String key = String.format(
@@ -63,5 +64,4 @@ public class S3StorageService {
 
         return getFileUrl(key);
     }
-
 }

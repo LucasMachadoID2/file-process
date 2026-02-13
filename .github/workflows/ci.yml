@@ -10,6 +10,10 @@ jobs:
     name: Integration
     runs-on: ubuntu-latest
 
+    env:
+      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+      SPRING_PROFILES_ACTIVE: dev
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -25,4 +29,4 @@ jobs:
         run:  ./gradlew clean build -x test
 
       - name: Unit tests
-        run: ./gradlew clean test
+        run: ./gradlew test
