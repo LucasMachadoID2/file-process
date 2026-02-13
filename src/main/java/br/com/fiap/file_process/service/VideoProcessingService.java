@@ -15,29 +15,13 @@ public class VideoProcessingService {
     private final FileManagementClient fileManagementClient;
     private final EmailService emailService;
 
-    public VideoProcessingService(S3StorageService s3StorageService, FileManagementClient fileManagementClient,EmailService emailService) {
+    public VideoProcessingService(S3StorageService s3StorageService, FileManagementClient fileManagementClient, EmailService emailService) {
         this.s3StorageService = s3StorageService;
         this.fileManagementClient = fileManagementClient;
         this.emailService = emailService;
     }
 
-    public String processVideoAndUpload(MultipartFile video, String email, String videoId) throws Exception {
-
-        File tempVideo = File.createTempFile("video", ".mp4");
-        video.transferTo(tempVideo);
-
-        File framesDir = Files.createTempDirectory("frames").toFile();
-        VideoFrameExtractor.extractFrames(tempVideo, framesDir);
-
-        File zip = File.createTempFile("frames", ".zip");
-        ZipUtil.zipDirectory(framesDir, zip);
-
-        // Upload para o S3
-        return s3StorageService.uploadZip(zip, email, videoId);
-    }
-
-
-    public String processVideoAndUploadRabbit(byte[] videoBytes, String email, String videoId) throws Exception {
+    public void processVideoAndUploadRabbit(byte[] videoBytes, String email, String videoId) throws Exception {
 
         File tempVideo = null;
         File framesDir = null;
@@ -54,9 +38,8 @@ public class VideoProcessingService {
 
             zip = File.createTempFile("frames-rabbit-", ".zip");
             ZipUtil.zipDirectory(framesDir, zip);
+            s3StorageService.uploadZipRabbit(zip, email, videoId);
             fileManagementClient.updateVideoStatus(videoId, "FINISHED");
-            return s3StorageService.uploadZipRabbit(zip, email, videoId);
-
         } catch (Exception e) {
             handleError(email, videoId, e);
             throw e;
