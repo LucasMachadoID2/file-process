@@ -1,7 +1,7 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.9'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'org.springframework.boot' version '3.5.9'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'br.com.fiap'
@@ -9,21 +9,57 @@ version = '0.0.1-SNAPSHOT'
 description = 'Project File Management for hackathon fiap 2026'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "software.amazon.awssdk:bom:2.25.60"
+    }
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    /* =========================
+       SPRING
+       ========================= */
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    /* =========================
+       AWS SDK
+       ========================= */
+    implementation 'software.amazon.awssdk:s3'
+
+    /* =========================
+       EMAIL
+       ========================= */
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    /* =========================
+       VIDEO PROCESSING
+       ========================= */
+    implementation 'org.bytedeco:javacv-platform:1.5.10'
+
+    /* =========================
+       TESTS
+       ========================= */
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core'
+
+    /* =========================
+       RABBITMQ
+    ========================= */
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

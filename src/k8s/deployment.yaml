@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-process
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: file-process
+  template:
+    metadata:
+      labels:
+        app: file-process
+    spec:
+      containers:
+        - name: file-process
+          image: file-process:1.0.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: aws-credentials
