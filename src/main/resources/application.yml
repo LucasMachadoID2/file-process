@@ -10,6 +10,8 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
+  profiles:
+    active: dev
 
   rabbitmq:
     addresses: amqps://rgovhbyf:PleWWS7G5pTsj7faqls2gI_B0HF72o36@seal.lmq.cloudamqp.com/rgovhbyf
