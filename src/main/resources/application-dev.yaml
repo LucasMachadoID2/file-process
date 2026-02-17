@@ -1,6 +1,6 @@
 aws:
   s3:
-    bucket-name: file-process-bucket-uuy3c0
+    bucket-name: file-process-bucket-fiap
   ses:
     sender: fiapvideosystem@gmail.com
 
