@@ -171,3 +171,11 @@ Para rodar os testes unitários e garantir a integridade do código:
 ```bash
 ./gradlew test
 ```
+
+Com coverage:
+```bash
+.\gradlew clean test jacocoTestReport
+```
+
+## Testes unitários - Coverage:
+![Testes unitários - coverage](./docs/coverage.png)
