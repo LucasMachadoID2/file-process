@@ -38,8 +38,9 @@ public class VideoProcessingService {
 
             zip = File.createTempFile("frames-rabbit-", ".zip");
             ZipUtil.zipDirectory(framesDir, zip);
-            s3StorageService.uploadZipRabbit(zip, email, videoId);
-            fileManagementClient.updateVideoStatus(videoId, "FINISHED");
+            String zipUrl = s3StorageService.uploadZipRabbit(zip, email, videoId);
+            System.out.println("ZIP URL gerada: " + zipUrl);
+            fileManagementClient.updateVideoStatus(videoId, "FINISHED", zipUrl);
         } catch (Exception e) {
             handleError(email, videoId, e);
             throw e;

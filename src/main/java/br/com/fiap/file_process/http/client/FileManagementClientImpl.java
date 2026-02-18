@@ -25,7 +25,7 @@ public class FileManagementClientImpl implements FileManagementClient {
     }
 
     @Override
-    public void updateVideoStatus(String videoId, String status) {
+    public void updateVideoStatus(String videoId, String status, String urlS3) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("integration-name", "FILE_PROCESS_INTEGRATION");
         headers.set("integration-key", integrationKey);
@@ -36,6 +36,7 @@ public class FileManagementClientImpl implements FileManagementClient {
                         fileManagementUrl + "/v1/files/update-status/" + videoId
                 )
                 .queryParam("status", status)
+                .queryParam("url", urlS3)
                 .toUriString();
 
         try {
