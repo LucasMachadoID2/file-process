@@ -1,6 +1,8 @@
 package br.com.fiap.file_process.http.client;
 
+import br.com.fiap.file_process.http.client.dto.FileUpdateRequest;
+
 public interface FileManagementClient {
 
-    void updateVideoStatus(String videoId, String status);
+    void updateFileManagement(String videoId,  FileUpdateRequest fileUpdateRequest);
 }
