@@ -1,7 +1,7 @@
 aws:
   region: us-east-1
   s3:
-    bucket-name: file-process-bucket-uuy3c0
+    bucket-name: file-process-bucket-fiap
   ses:
     sender: no-reply@fiapx.com
 

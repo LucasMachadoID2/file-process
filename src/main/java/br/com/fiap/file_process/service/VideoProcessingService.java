@@ -1,7 +1,6 @@
 package br.com.fiap.file_process.service;
 
 import br.com.fiap.file_process.http.client.FileManagementClient;
-import br.com.fiap.file_process.http.client.dto.FileUpdateRequest;
 import br.com.fiap.file_process.util.VideoFrameExtractor;
 import br.com.fiap.file_process.util.ZipUtil;
 import org.springframework.stereotype.Service;
@@ -39,23 +38,15 @@ public class VideoProcessingService {
 
             zip = File.createTempFile("frames-rabbit-", ".zip");
             ZipUtil.zipDirectory(framesDir, zip);
-            String urlFileDownload = s3StorageService.uploadZipRabbit(zip, email, videoId);
-            updateFileManagement(videoId, urlFileDownload);
+            String zipUrl = s3StorageService.uploadZipRabbit(zip, email, videoId);
+            System.out.println("ZIP URL gerada: " + zipUrl);
+            fileManagementClient.updateVideoStatus(videoId, "FINISHED", zipUrl);
         } catch (Exception e) {
             handleError(email, videoId, e);
             throw e;
         } finally {
             cleanup(tempVideo, framesDir, zip);
         }
-    }
-
-    private void updateFileManagement(String videoId, String urlFileDownload) {
-        FileUpdateRequest fileUpdateRequest = new FileUpdateRequest(
-                "FINISHED",
-                urlFileDownload
-        );
-
-        fileManagementClient.updateFileManagement(videoId, fileUpdateRequest);
     }
 
     private void handleError(String email, String videoId, Exception e) {
