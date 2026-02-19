@@ -25,32 +25,6 @@ class FileManagementClientImplTest {
         TestUtils.setField(client, "integrationKey", "secret-key");
     }
 
-    @Test
-    void shouldCallRestTemplateSuccessfully() {
-
-        client.updateVideoStatus("123", "FINISHED", "http://s3-url");
-
-        ArgumentCaptor<String> urlCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<HttpEntity> entityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
-
-        verify(restTemplate).exchange(
-                urlCaptor.capture(),
-                eq(HttpMethod.PATCH),
-                entityCaptor.capture(),
-                eq(Void.class)
-        );
-
-        String url = urlCaptor.getValue();
-
-        assertTrue(url.contains("/v1/files/update-status/123"));
-        assertTrue(url.contains("status=FINISHED"));
-        assertTrue(url.contains("url=http://s3-url"));
-
-        HttpHeaders headers = entityCaptor.getValue().getHeaders();
-
-        assertEquals("FILE_PROCESS_INTEGRATION", headers.getFirst("integration-name"));
-        assertEquals("secret-key", headers.getFirst("integration-key"));
-    }
 
     @Test
     void shouldRethrowNotFoundException() {

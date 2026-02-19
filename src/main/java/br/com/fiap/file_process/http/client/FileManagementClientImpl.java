@@ -29,14 +29,14 @@ public class FileManagementClientImpl implements FileManagementClient {
         HttpHeaders headers = new HttpHeaders();
         headers.set("integration-name", "FILE_PROCESS_INTEGRATION");
         headers.set("integration-key", integrationKey);
+        headers.setContentType(org.springframework.http.MediaType.TEXT_PLAIN);
 
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        HttpEntity<String> entity = new HttpEntity<>(urlS3, headers);
 
         String url = UriComponentsBuilder.fromUriString(
                         fileManagementUrl + "/v1/files/update-status/" + videoId
                 )
                 .queryParam("status", status)
-                .queryParam("url", urlS3)
                 .toUriString();
 
         try {
